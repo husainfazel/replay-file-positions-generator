@@ -65,11 +65,14 @@ def process_player_df(game) -> List[ReplayPlayer]:
 players_data = process_player_df(proto_object)
 game_frames = dataframe['game'][['delta', 'seconds_remaining', 'time']].fillna(-100)
 
-print(better_jsonify(ReplayPositions(
-    id_=replay_file,
-    ball=ball_df.values.tolist(),
-    players=players_data,
-    colors=[player.is_orange for player in players],
-    names=[player.name for player in players],
-    frames=game_frames.values.tolist()
-)))
+print(json.dumps({
+    "metadata": json_proto_object,
+    "positions": better_jsonify(ReplayPositions(
+        id_=replay_file,
+        ball=ball_df.values.tolist(),
+        players=players_data,
+        colors=[player.is_orange for player in players],
+        names=[player.name for player in players],
+        frames=game_frames.values.tolist()
+    ))
+}))
